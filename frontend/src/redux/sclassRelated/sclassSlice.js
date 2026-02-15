@@ -20,6 +20,13 @@ const sclassSlice = createSlice({
         getRequest: (state) => {
             state.loading = true;
         },
+       deleteSclassSuccess: (state, action) => {
+    state.sclassesList = state.sclassesList.filter(
+        (sclass) => sclass._id?.toString() !== action.payload?.toString()
+    );
+},
+
+
         getSubDetailsRequest: (state) => {
             state.subloading = true;
         },
@@ -86,7 +93,8 @@ export const {
     getFailedTwo,
     resetSubjects,
     getSubDetailsSuccess,
-    getSubDetailsRequest
+    getSubDetailsRequest,
+    deleteSclassSuccess  
 } = sclassSlice.actions;
 
 export const sclassReducer = sclassSlice.reducer;

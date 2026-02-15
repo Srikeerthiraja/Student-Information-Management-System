@@ -20,3 +20,10 @@ export const getAllNotices = (id, address) => async (dispatch) => {
         dispatch(getError(error));
     }
 }
+export const deleteNotice = (id) => async (dispatch) => {
+    try {
+        await axios.delete(`${process.env.REACT_APP_BASE_URL}/Notice/${id}`);
+    } catch (error) {
+        console.log(error);
+    }
+};

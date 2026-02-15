@@ -46,13 +46,13 @@ const TeacherComplain = () => {
     useEffect(() => {
         if (status === "added") {
             setLoader(false)
-            setSeverity('success'); // 🔑 Set to success color
+            setSeverity('success'); 
             setShowPopup(true)
             setMessage("Complain Added Successfully")
         }
         else if (error) {
             setLoader(false)
-            setSeverity('error'); // 🔑 Set to error color
+            setSeverity('error'); 
             setShowPopup(true)
             setMessage("Submission Failed. Check console for error.")
         }

@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
+import DeleteIcon from "@mui/icons-material/Delete";
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import {
+    Box, IconButton,
+    Paper
+} from '@mui/material';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import {
-    Paper, Box, IconButton
-} from '@mui/material';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import DeleteIcon from "@mui/icons-material/Delete";
-import { getAllNotices } from '../../../redux/noticeRelated/noticeHandle';
-import { deleteUser } from '../../../redux/userRelated/userHandle';
-import TableTemplate from '../../../components/TableTemplate';
 import { GreenButton } from '../../../components/buttonStyles';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
+import TableTemplate from '../../../components/TableTemplate';
+import { deleteNotice, getAllNotices } from '../../../redux/noticeRelated/noticeHandle';
 
 const ShowNotices = () => {
 
@@ -27,12 +27,11 @@ const ShowNotices = () => {
         console.log(error);
     }
 
-    const deleteHandler = (deleteID, address) => {
-        dispatch(deleteUser(deleteID, address))
-            .then(() => {
-                dispatch(getAllNotices(currentUser._id, "Notice"));
-            })
-    }
+   const deleteHandler = async (deleteID) => {
+    await dispatch(deleteNotice(deleteID));
+    dispatch(getAllNotices(currentUser._id, "Notice"));
+};
+
 
     const noticeColumns = [
         { id: 'title', label: 'Title', minWidth: 170 },
@@ -54,7 +53,7 @@ const ShowNotices = () => {
     const NoticeButtonHaver = ({ row }) => {
         return (
             <>
-                <IconButton onClick={() => deleteHandler(row.id, "Notice")}>
+                <IconButton onClick={() => deleteHandler(row.id)}>
                     <DeleteIcon color="error" />
                 </IconButton>
             </>

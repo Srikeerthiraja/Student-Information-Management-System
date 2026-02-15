@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { getAllStudents } from '../studentRelated/studentHandle';
+import { getAllTeachers } from '../teacherRelated/teacherHandle';
 import {
     authError,
     authFailed,
@@ -12,7 +14,7 @@ import {
     stuffAdded
 } from './userSlice';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const loginUser = (fields, role) => async (dispatch) => {
     dispatch(authRequest());
@@ -59,6 +61,14 @@ export const registerUser = (fields, role) => async (dispatch) => {
             } else {
                 // Student/Teacher registration
                 dispatch(stuffAdded(result.data));
+
+                const adminID = fields?.adminID || fields?.school || result.data?.school || result.data?.adminID;
+                if (role === "Student" && adminID) {
+                    dispatch(getAllStudents(adminID));
+                }
+                if (role === "Teacher" && adminID) {
+                    dispatch(getAllTeachers(adminID));
+                }
             }
         } else {
             dispatch(authFailed(result.data.message || 'Registration failed'));

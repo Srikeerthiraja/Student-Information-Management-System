@@ -1,9 +1,32 @@
 import { Box, Grid } from '@mui/material';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { LightPurpleButton } from '../components/buttonStyles';
+import { getAllSclasses } from '../redux/sclassRelated/sclassHandle';
+import { getAllStudents } from '../redux/studentRelated/studentHandle';
+import { getAllTeachers } from '../redux/teacherRelated/teacherHandle';
 
 const Homepage = () => {
+    const dispatch = useDispatch();
+    const { sclassesList } = useSelector((state) => state.sclass);
+    const { studentsList } = useSelector((state) => state.student);
+    const { teachersList } = useSelector((state) => state.teacher);
+    const { currentUser } = useSelector((state) => state.user);
+    const adminID = currentUser?._id;
+    const numberOfClasses = sclassesList?.length || 0;
+    const numberOfStudents = studentsList?.length || 0;
+    const numberOfTeachers = teachersList?.length || 0;
+
+    useEffect(() => {
+        if (adminID) {
+            dispatch(getAllSclasses(adminID, "Sclass"));
+            dispatch(getAllStudents(adminID));
+            dispatch(getAllTeachers(adminID));
+        }
+    }, [adminID, dispatch]);
+
     return (
         <BackgroundWrapper>
             <Overlay />
@@ -17,16 +40,17 @@ const Homepage = () => {
                         </StyledTitle>
                         <StyledText>
                             <h4>
-                                Effortlessly manage student data and academic operations — from organizing classes and enrolling students or faculty, to tracking attendance, evaluating performance, and delivering feedback. Access academic records, view grades, and communicate with ease, all in one seamless platform.
+                                Effortlessly manage student data and academic operations - from organizing classes and enrolling students or faculty, to tracking attendance, evaluating performance, and delivering feedback. Access academic records, view grades, and communicate with ease, all in one seamless platform.
                             </h4>
                         </StyledText>
+               
                         <StyledBox>
                             <StyledLink to="/choose">
                                 <LightPurpleButton variant="contained" fullWidth>
                                     Login
                                 </LightPurpleButton>
                             </StyledLink>
-                         
+
                             <StyledText>
                                 Don't have an account?{' '}
                                 <Link to="/Adminregister" style={{ color: "#550080" }}>
@@ -97,6 +121,13 @@ const StyledText = styled.p`
   color: #f4f2f5;
   line-height: 1.6;
   margin: 20px 0;
+`;
+
+const ClassCountText = styled.p`
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 8px 0 0;
+  font-weight: 600;
 `;
 
 const StyledBox = styled(Box)`

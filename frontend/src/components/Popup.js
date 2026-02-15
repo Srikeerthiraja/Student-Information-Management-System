@@ -25,7 +25,7 @@ const Popup = ({ message, setShowPopup, showPopup }) => {
             <Snackbar open={showPopup} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }} key={vertical + horizontal}>
                 {
                     (message === "Done Successfully") ?
-                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        <Alert onClose={handleClose} severity={severity || "success"}    variant="filled"  sx={{ width: '100%' }}>
                             {message}
                         </Alert>
                         :

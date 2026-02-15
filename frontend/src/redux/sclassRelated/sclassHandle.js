@@ -1,29 +1,32 @@
-import axios from 'axios';
+import API from '../../services/api';
 import {
-    getRequest,
-    getSuccess,
-    getFailed,
-    getError,
-    getStudentsSuccess,
+    deleteSclassSuccess,
     detailsSuccess,
+    getError,
+    getFailed,
     getFailedTwo,
-    getSubjectsSuccess,
+    getRequest,
+    getStudentsSuccess,
+    getSubDetailsRequest,
     getSubDetailsSuccess,
-    getSubDetailsRequest
+    getSubjectsSuccess,
+    getSuccess
 } from './sclassSlice';
+
+const getErrorMessage = (error) => error?.response?.data?.message || error?.message || 'Something went wrong';
 
 export const getAllSclasses = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}List/${id}`);
+        const result = await API.get(`${process.env.REACT_APP_BASE_URL}/${address}List/${id}`);
         if (result.data.message) {
             dispatch(getFailedTwo(result.data.message));
         } else {
             dispatch(getSuccess(result.data));
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getError(getErrorMessage(error)));
     }
 }
 
@@ -31,14 +34,14 @@ export const getClassStudents = (id) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/Sclass/Students/${id}`);
+        const result = await API.get(`${process.env.REACT_APP_BASE_URL}/Sclass/Students/${id}`);
         if (result.data.message) {
             dispatch(getFailedTwo(result.data.message));
         } else {
             dispatch(getStudentsSuccess(result.data));
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getError(getErrorMessage(error)));
     }
 }
 
@@ -46,12 +49,12 @@ export const getClassDetails = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+        const result = await API.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
         if (result.data) {
             dispatch(detailsSuccess(result.data));
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getError(getErrorMessage(error)));
     }
 }
 
@@ -59,14 +62,14 @@ export const getSubjectList = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+        const result = await API.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
         if (result.data.message) {
             dispatch(getFailed(result.data.message));
         } else {
             dispatch(getSubjectsSuccess(result.data));
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getError(getErrorMessage(error)));
     }
 }
 
@@ -74,14 +77,14 @@ export const getTeacherFreeClassSubjects = (id) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/FreeSubjectList/${id}`);
+        const result = await API.get(`${process.env.REACT_APP_BASE_URL}/FreeSubjectList/${id}`);
         if (result.data.message) {
             dispatch(getFailed(result.data.message));
         } else {
             dispatch(getSubjectsSuccess(result.data));
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getError(getErrorMessage(error)));
     }
 }
 
@@ -89,11 +92,48 @@ export const getSubjectDetails = (id, address) => async (dispatch) => {
     dispatch(getSubDetailsRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+        const result = await API.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
         if (result.data) {
             dispatch(getSubDetailsSuccess(result.data));
         }
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getError(getErrorMessage(error)));
     }
 }
+export const deleteSclass = (id) => async (dispatch) => {
+  try {
+    await API.delete(`${process.env.REACT_APP_BASE_URL}/Sclass/${id}`);
+    dispatch(deleteSclassSuccess(id));
+    return true;
+  } catch (error) {
+    dispatch(getError(getErrorMessage(error)));
+    throw error;
+  }
+};
+
+export const deleteAllSclasses = (id) => async (dispatch) => {
+  try {
+    await API.delete(`${process.env.REACT_APP_BASE_URL}/Sclasses/${id}`);
+    return true;
+  } catch (error) {
+    dispatch(getError(getErrorMessage(error)));
+    throw error;
+  }
+};
+// ==========================
+// DELETE SUBJECT
+// ==========================
+export const deleteSubject = (id) => async (dispatch, getState) => {
+    try {
+        await API.delete(
+            `${process.env.REACT_APP_BASE_URL}/Subject/${id}`
+        );
+
+        const adminID = getState().user.currentUser._id;
+
+        dispatch(getSubjectList(adminID, "AllSubjects"));
+
+    } catch (error) {
+        console.log("Delete Subject Error:", error);
+    }
+};
