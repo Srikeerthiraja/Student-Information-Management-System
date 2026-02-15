@@ -8,23 +8,11 @@ A MERN-based Student Information Management System implementing role-based acces
 
 ##  Live Demo
 
-Frontend (Vercel): student-information-management-system-22bce9368-21cargc41.vercel.app
+Frontend (Vercel): 
+student-information-management-system-22bce9368-21cargc41.vercel.app
 
-Backend API (Render): https://student-information-management-system-p4x6.onrender.com
-### Demo Credentials
-
-<!-- Admin:
-Email: admin@test.com  
-Password: 123456
-
-Teacher:
-Email: teacher@test.com  
-Password: 123456
-
-Student:
-Email: student@test.com  
-Password: 123456 -->
-
+Backend API (Render): 
+https://student-information-management-system-p4x6.onrender.com
 
 
 ## Problem Statement
@@ -60,6 +48,24 @@ and clear separation of responsibilities between users.
 
 - **Communication:** Users can communicate effortlessly through the system. Teachers can send messages to students and vice versa, promoting effective communication and collaboration.
 
+## API Endpoints (Sample)
+
+POST   /login  
+POST   /register  
+GET    /SclassList/:adminId  
+DELETE /Sclass/:id  
+GET    /AllSubjects/:adminId  
+POST   /Attendance  
+
+## Security Features
+
+- JWT-based authentication
+- Role-based authorization middleware
+- Protected REST endpoints
+- Environment variables for secrets
+- CORS configuration for production
+
+
 ## Technologies Used
 
 - Frontend: React.js, Material UI, Redux
@@ -71,7 +77,7 @@ and clear separation of responsibilities between users.
 <br>
 
 ## Architecture Overview
-- React frontend communicates with Express REST APIs using the Fetch API
+- React frontend communicates with Express REST APIs using Axios.
 - JWT tokens are used for authentication and role-based authorization
 - MongoDB stores users, classes, attendance, and performance data
 
